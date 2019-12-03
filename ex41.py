@@ -5,6 +5,8 @@ import sys
 WORD_URL = "http://learncodethehardway.org/words.txt"
 WORDS = []
 
+print(">>> words =", WORDS)
+
 PHRASES = {
     "class %%%(%%%):":
         "Make a class named %%% that is-a %%%.",
@@ -22,6 +24,7 @@ PHRASES = {
 
 # do they want to drill phrases first
 if len(sys.argv) == 2 and sys.argv[1] == "english":
+
     PHRASES_FIRST = True
 else:
     PHRASES_FIRST = False
@@ -31,17 +34,24 @@ for word in urlopen(WORD_URL).readlines():
     WORDS.append(str(word.strip(), encoding="utf-8"))
 
 
+
+
 def convert(snippet, phrase):
     class_names = [w.capitalize() for w in
                    random.sample(WORDS, snippet.count("%%%"))]
     other_names = random.sample(WORDS, snippet.count("***"))
+    print(">>> snippet =", snippet.count("%%%"))
     results = []
     param_names = []
 
     for i in range(0, snippet.count("@@@")):
         param_count = random.randint(1, 3)
+        print(">>>>> paramcount=", param_count)
+
         param_names.append(','.join(
             random.sample(WORDS, param_count)))
+
+        print(">>>>> paramname=", param_names)
 
     for sentence in snippet, phrase:
         result = sentence[:]
@@ -50,16 +60,20 @@ def convert(snippet, phrase):
         for word in class_names:
             result = result.replace("%%%", word, 1)
 
+            print(">>>>word class =", word)
+            print(">>>> result class=", result)
         # fake other names
         for word in other_names:
            result = result.replace("***", word, 1)
-
+           print(">>>>word other=", word)
+           print(">>>> result other=", result)
         # fake parameter lists
         for word in param_names:
             result = result.replace("@@@", word, 1)
-
+            print(">>>>word param=", word)
+            print(">>>> result param=", result)
         results.append(result)
-
+        print(">>>>>>>>>>>results=", results)
     return results
 
 
