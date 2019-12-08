@@ -1,16 +1,19 @@
-class Bag:
-    def __init__(self):
-        self.data = []
+class Person:
+  def __init__(self, fname, lname):
+    self.firstname = fname
+    self.lastname = lname
 
-    def add(self, x):
-        self.data.append(x)
+  def printname(self):
+    print(self.firstname, self.lastname)
 
-    def addtwice(self, x):
-        self.add(x)
-        self.add(x)
+class Student(Person):
+  def __init__(self, fname, lname, year):
+    super().__init__(fname, lname)
+    self.graduationyear = year
 
-        a = Bag.addtwice()
+  def welcome(self):
+    print("Welcome", self.firstname, self.lastname, "to the class of", self.graduationyear)
 
-
-
-        print(">>>", a)
+x = Student("Mike", "Olsen", 2019)
+x.welcome()
+x.printname()
