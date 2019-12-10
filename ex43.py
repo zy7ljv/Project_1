@@ -45,7 +45,7 @@ class CentralCorridor(Scene):
 
     def enter(self):
         print(dedent("""
-              The Gothons of Planet Percal #25 have invaded your ship and
+                The Gothons of Planet Percal #25 have invaded your ship and
                 destroyed your entire crew. You are the last surviving
                 member and your last mission is to get the neutron destruct
                 bomb from the Weapons Armory, put it in the bridge, and
@@ -95,7 +95,7 @@ class CentralCorridor(Scene):
                 the head putting him down, then jump through the    
                 Weapon Armory door. 
                 """))
-            return 'Laser_weapon_armory'
+            return 'laser_weapon_armory'
 
         else:
             print("DOES NOT COMPUTE!")
@@ -117,13 +117,21 @@ class LaserWeaponArmory(Scene):
              """))
 
         code = f"{randint(1,9)}{randint(1,9)}{randint(1,9)}"
+        guesses = 0
         guess = input("[keypad]>")
-        gueses = 0
 
-        while guess != code and gueses < 10:
+
+        while guess != code and guesses < 8:
+
             print("BZZZZeDDD!")
-            gueses += 1
-            guess = input("[keypad]>")
+            guess = input(f"[keypad] you still have {int(9 - guesses)} guesses left >")
+            guesses += 1
+
+            while guesses == 8:
+                print("BZZZZeDDD!")
+                guess = input(f"[keypad] you have only Last chance left (Man! The code is {code}) >")
+                break
+
 
         if guess == code:
             print(dedent("""
@@ -199,19 +207,10 @@ class EscapePod(Scene):
              There's 5 pods, which one do you take?
               """))
 
-        good_pod = randint(1, 5)
-        guess = input("[Pod #]> ")
+        good_pod = f"{randint(1, 5)}"
+        guess = input(f"[Pod #]({good_pod})> ")
 
-        if int(guess) != good_pod:
-            print(dedent(f"""
-               You jump into pod {guess} and hit the eject button.
-                The pod escapes out into the void of space, then
-                 implodes as the hull ruptures, crushing your body into 
-                 jam jelly. 
-                  """))
-            return 'death'
-
-        else:
+        if guess == good_pod or guess == "God Mode":
             print(dedent(f"""
                     You jump into pod {guess} and hit the eject button.    
                     The pod easily slides out into space heading to the
@@ -222,6 +221,16 @@ class EscapePod(Scene):
                  """))
             return 'finished'
 
+
+        else:
+             print(dedent(f"""
+              You jump into pod {guess} and hit the eject button.
+              The pod escapes out into the void of space, then
+                 implodes as the hull ruptures, crushing your body into 
+              jam jelly. 
+          """))
+        return 'death'
+
 class Finished(Scene):
 
     def enter(self):
@@ -231,16 +240,24 @@ class Finished(Scene):
 
 class Map(object):
 
-    scenes = {}
+    scenes = {
+        'central_corridor': CentralCorridor(),
+        'laser_weapon_armory': LaserWeaponArmory(),
+        'the_bridge': TheBridge(),
+        'escape_pod': EscapePod(),
+        'death': Death(),
+        'finished': Finished(),
+    }
 
     def __init__(self, start_scene):
-        pass
+        self.start_scene = start_scene
 
     def next_scene(self, scene_name):
-        pass
+        val = Map.scenes.get(scene_name)
+        return val
 
     def opening_scene(self):
-        pass
+        return self.next_scene(self.start_scene)
 
 
 a_map = Map('central_corridor')
