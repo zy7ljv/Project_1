@@ -18,8 +18,15 @@ class Child(object):
         self.other.implicit()
 
     def override(self):
-        print("CHILD")
+        print("CHILD override()")
 
-    def override(self):
-        print("CHILD, BEFORE OTHER ALTERED")
-        self.other.
+    def altered(self):
+        print("CHILD, BEFORE OTHER ALTERED()")
+        self.other.altered()
+        print("Child, After Other altered()")
+
+son = Child()
+
+son.implicit()
+son.override()
+son.altered()
